@@ -34,7 +34,7 @@
       <div>
          <button type="button" th:onclick="|location.href='@{/empUpdate(employeeId=${empInfo.employeeId})}'|">수정</button>
          <button type="button" th:onclick="|location.href='@{/empList}'|">목록</button>
-         <button type="button">삭제</button>
+         <button type="button" th:onclick="|location.href='@{/empDelete(employeeId=${empInfo.employeeId})}'|">삭제</button>
       </div>
    </div>
 </body>
