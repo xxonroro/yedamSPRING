@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+	<form th:object="${empInfo}">
+		<div>
+	       <label for="employeeId">사원번호</label>
+	       <input type="number" th:field="*{employeeId}" readonly>
+	    </div>
+	    <div>
+	       <label for="ename">이름</label>
+	       <input type="text" th:field="*{lastName}">
+	    </div>
+	    <div>
+	       <label for="email">이메일</label>
+	       <input type="email" th:field="*{email}">
+	    </div>
+	    <div>
+	       <label for="hDate">입사일</label>
+	       <input type="date" th:field="*{hireDate}">
+	    </div>
+	    <div>
+	       <label for="job">업무</label>
+	       <input type="text" th:field="*{jobId}">
+	    </div>
+	    <div>
+	       <label for="sal">급여</label>
+	       <input type="number" id="sal" th:field="*{salary}">
+	    </div>
+	    <div>
+	       <button type="button" id="updateBtn">저장</button>
+	    </div>
+   </form>
+   <script>
+   		$("#updateBtn").on("click", updateAjax);
+   		
+   		function updateAjax(event) {
+   			// 1) Validation Check
+			if(!validationCheck()) {
+				return;
+			}
+   			
+	   		
+   			// 2) 보낼 데이터 정리
+   			let dataObj = getEmpObj();
+   			console.log(dataObj);
+   			
+   			// 3) AJAX
+   			$.ajax('empUpdate', {
+				type: 'post',
+				// data : dataObj, // 객체 => 쿼리 스트링 (content type은 application/x-www-form-urlencoded가 디폴트 값)
+				
+				contentType : "application/json", 
+				data : JSON.stringify(dataObj) // 객체나 배열을 JSON 형식으로 변환
+   			})
+   			.done(result => {
+   				console.log(result);
+   			})
+   			.fail(error => {
+   				console.error(error);
+   			});
+   		}
+   		
+   		function validationCheck() {
+   			let name = $('#lastName');
+   			if(name.val() == '') {
+   				alert("사원 이름은 필수로 입력해야합니다.");
+   				name.focus();
+   				return false;
+   			}
+   			
+   			return true; 
+   		}
+   		
+   		function getEmpObj() {
+   			let formAry = $('form').serializeArray();
+   			// [{name: 'employeeId', vlaue : '209'}, {name: 'lastName', vlaue : 'King'}]
+   			
+   			let formObj = {};
+   			formAry.forEach(inputTag => {
+   				formObj[inputTag.name] = inputTag.value;
+   			});
+   			
+   			return formObj;
+   		}
+   </script>
+</body>
+</html>
