@@ -17,5 +17,4 @@ public interface DeptMapper {
 							@Param("dpetInfo")DeptVO deptVO);
 	
 	public int deleteDeptInfo(int deptId);
-	
 }
