@@ -20,14 +20,14 @@ public class SpringSecruityConfig {
 		return new BCryptPasswordEncoder();
 	}
 	
-	// 메모리상 인증정보 등록 => 테스트 전용 방식
-	@Bean
-	InMemoryUserDetailsManager inMemoryUserDetailsManager() { 
-		UserDetails user = User.builder().username("user01").password(passwordEncoder().encode("1234")).roles("USER").build(); // .authorities(ROLE_USER) 지정된 이름이 정식 명칭
-		UserDetails admin = User.builder().username("admin1").password(passwordEncoder().encode("1234")).authorities("ROLE_ADMIN").build();
-		
-		return new InMemoryUserDetailsManager(user, admin);
-	}
+//	// 메모리상 인증정보 등록 => 테스트 전용 방식
+//	@Bean
+//	InMemoryUserDetailsManager inMemoryUserDetailsManager() { 
+//		UserDetails user = User.builder().username("user01").password(passwordEncoder().encode("1234")).roles("USER").build(); // .authorities(ROLE_USER) 지정된 이름이 정식 명칭
+//		UserDetails admin = User.builder().username("admin1").password(passwordEncoder().encode("1234")).authorities("ROLE_ADMIN").build();
+//		
+//		return new InMemoryUserDetailsManager(user, admin);
+//	}
 	
 	// 인증 및 인가 설정
 	@Bean
@@ -39,8 +39,14 @@ public class SpringSecruityConfig {
 			.anyRequest().authenticated()
 			.and()
 			.formLogin()
+			.defaultSuccessUrl("/all")
 			.and()
-			.logout();
+			.logout()
+			.logoutSuccessUrl("/all");
+		
+		
+//		http.csrf().disable();
+		
 		
 		return http.build();
 	}
